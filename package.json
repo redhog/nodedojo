@@ -8,7 +8,8 @@
                       { "name": "Egil Moeller" }
                      ],
   "dependencies"   : {
-                      "jsdom"               : "0.2.15"
+                      "jsdom"               : "0.2.15",
+                      "requirejs"           : "2.0.4"
                      },
   "bin":             { },
   "devDependencies": {

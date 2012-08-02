@@ -28,7 +28,7 @@ require({
   ],
   // set the path for the require plugins—text, i18n, etc.
   paths: {
-    require: 'lib/requirejs/require'
+    require: '../node_modules/requirejs/require'
   }
 });
 
