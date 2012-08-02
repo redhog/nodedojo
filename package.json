@@ -1,0 +1,21 @@
+{
+  "name"           : "notedojo",
+  "description"    : "A node.js/dojo test application",
+  "homepage"       : "https://redhog.org",
+  "keywords"       : ["nodejs", "dojo"],
+  "author"         : "Egil Möller",
+  "contributors"   : [
+                      { "name": "Egil Moeller" }
+                     ],
+  "dependencies"   : {
+                      "jsdom"               : "0.2.15"
+                     },
+  "bin":             { },
+  "devDependencies": {
+                      "jshint"  : "*"
+                     },
+  "engines"        : { "node" : ">=0.6.0",
+                       "npm"  : ">=1.0"
+                     }, 
+  "version"        : "1.0.0"
+}

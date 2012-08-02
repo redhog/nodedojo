@@ -1,0 +1,3 @@
+define({
+  helloWorld: "Hello World!"
+});
