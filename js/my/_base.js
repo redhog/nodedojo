@@ -1,4 +1,4 @@
-require(["node-proxy", "jsdom", "resolve"], function (Proxy, jsdom, resolve) {
+require(["jsdom", "resolve"], function (jsdom, resolve) {
   var oldLoad = require.load;
   require.load = function (context, moduleName, url) {
     var parts = moduleName.split("/")
