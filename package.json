@@ -10,6 +10,7 @@
   "dependencies"   : {
                       "jsdom"               : "0.2.15",
                       "requirejs"           : "2.0.4",
+                      "node-proxy"          : "0.5.2",
                       "resolve"             : "0.2.1"
                      },
   "bin":             { },

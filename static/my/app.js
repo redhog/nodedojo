@@ -1,5 +1,7 @@
 // requires dojo and our i18n dictionary
-define(['dojo', 'dojo/i18n!my/nls/app'], function (dojo, i18n) {
+define(['dojo', 'dojo/i18n!./nls/app', 'eh_plugin/static/amd/hooks'], function (dojo, i18n, hooks) {
+  hooks.callAll("foo", {});
+
   var isBrowser = dojo.isBrowser,
     mode = isBrowser ? 'Client' : 'Server',
 
