@@ -278,7 +278,7 @@
     define(["eh_underscore/static/amd/underscore", "eh_async/static/amd/async", "./jquery"], function (_, async, jQuery) { return  makeMod(_, async, jQuery); });
   } else {
     define(
-        ["eh_underscore/static/amd/underscore", "eh_async/static/amd/async", "npm/lib/npm.js", "eh_plugin/read-installed.js", "npm/lib/utils/relativize.js", "npm/lib/utils/read-json.js", "path", "fs", "./tsort", "util"],
+        ["eh_underscore/static/amd/underscore", "eh_async/static/amd/async", "npm/lib/npm.js", "eh_plugin/read-installed.js", "npm/lib/utils/relativize.js", "npm/lib/utils/read-json.js", "path", "fs", "eh_tsort/static/amd/tsort", "util"],
       function (_, async, npm, readInstalled, relativize, readJson, path, fs, tsort, util) {
         return makeMod(_, async, undefined, npm, readInstalled, relativize, readJson, path, fs, tsort, util);
       }
