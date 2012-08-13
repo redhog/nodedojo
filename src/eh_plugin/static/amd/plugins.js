@@ -275,10 +275,10 @@
   };
 
   if (isClient) {
-    define(["./underscore", "./async", "./jquery"], function (_, async, jQuery) { return  makeMod(_, async, jQuery); });
+    define(["eh_underscore/static/amd/underscore", "./async", "./jquery"], function (_, async, jQuery) { return  makeMod(_, async, jQuery); });
   } else {
     define(
-        ["./underscore", "./async", "npm/lib/npm.js", "eh_plugin/read-installed.js", "npm/lib/utils/relativize.js", "npm/lib/utils/read-json.js", "path", "fs", "./tsort", "util"],
+        ["eh_underscore/static/amd/underscore", "./async", "npm/lib/npm.js", "eh_plugin/read-installed.js", "npm/lib/utils/relativize.js", "npm/lib/utils/read-json.js", "path", "fs", "./tsort", "util"],
       function (_, async, npm, readInstalled, relativize, readJson, path, fs, tsort, util) {
         return makeMod(_, async, undefined, npm, readInstalled, relativize, readJson, path, fs, tsort, util);
       }
