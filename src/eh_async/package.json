@@ -1,8 +1,8 @@
 {
-  "name"           : "eh_underscore",
-  "description"    : "An AMD packaging of Underscore",
-  "homepage"       : "https://github.com/redhog/eh_underscore",
-  "keywords"       : ["AMD", "underscore"],
+  "name"           : "eh_async",
+  "description"    : "An AMD packaging of Async JS",
+  "homepage"       : "https://github.com/redhog/eh_async",
+  "keywords"       : ["AMD", "async"],
   "author"         : "RedHog (Egil Moeller) <redhog@redhog.org>",
   "contributors"   : [ { "name": "Egil Moeller" } ],
   "dependencies"   : { },

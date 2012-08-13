@@ -1,4 +1,4 @@
-define([], function (plugins, async, _) {
+define([], function () {
     return {
         bar: function (hook_name, args, cb) {
             console.log("SUCCESS");

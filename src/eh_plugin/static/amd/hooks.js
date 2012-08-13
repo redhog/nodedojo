@@ -1,4 +1,4 @@
-define(["./plugins", "./async", "eh_underscore/static/amd/underscore"], function (plugins, async, _) {
+define(["./plugins", "eh_async/static/amd/async", "eh_underscore/static/amd/underscore"], function (plugins, async, _) {
   var hooks = {};
 
   hooks.bubbleExceptions = true

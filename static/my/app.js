@@ -1,5 +1,5 @@
 // requires dojo and our i18n dictionary
-define(['dojo', 'dojo/i18n!./nls/app', 'eh_plugin/static/amd/plugins', 'eh_plugin/static/amd/hooks', "eh_plugin/static/amd/async"], function (dojo, i18n, plugins, hooks, async) {
+define(['dojo', 'dojo/i18n!./nls/app', 'eh_plugin/static/amd/plugins', 'eh_plugin/static/amd/hooks', "eh_async/static/amd/async"], function (dojo, i18n, plugins, hooks, async) {
 
     async.series(
       [
