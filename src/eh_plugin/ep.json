@@ -1,4 +1,10 @@
 {
   "parts": [
+    {
+      "name": "foo",
+      "hooks": {
+        "foo": "eh_plugin/static/amd/foo:bar"
+      }
+    }
   ]
 }

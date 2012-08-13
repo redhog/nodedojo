@@ -1,12 +1,13 @@
 (function () {
   var isClient = typeof global != "object";
 
-  var makeMod = function (_, jQuery, npm, readInstalled, relativize, readJson, path, async, fs, tsort, util) {
+  var makeMod = function (_, async, jQuery, npm, readInstalled, relativize, readJson, path, fs, tsort, util) {
     var pluginsmod = {};
 
     pluginsmod.isClient = isClient;
 
     pluginsmod.prefix = 'ep_';
+    pluginsmod.prefix_hidden = 'eh_';
     pluginsmod.loaded = false;
     pluginsmod.plugins = {};
     pluginsmod.parts = [];
@@ -20,27 +21,27 @@
         cb();
     };
 
-    pluginsmod.formatPlugins = function () {
-      return _.keys(pluginsmod.plugins).join(", ");
+    pluginsmod.formatPlugins = function (cb) {
+      cb(null, _.keys(pluginsmod.plugins).join(", "));
     };
 
-    pluginsmod.formatParts = function () {
-      return _.map(pluginsmod.parts, function (part) { return part.full_name; }).join("\n");
+    pluginsmod.formatParts = function (cb) {
+      cb(null, _.map(pluginsmod.parts, function (part) { return part.full_name; }).join("\n"));
     };
 
-    pluginsmod.formatHooks = function (hook_set_name) {
-      var res = [];
-      var hooks = pluginsmod.extractHooks(pluginsmod.parts, hook_set_name || "hooks");
-
-      _.chain(hooks).keys().forEach(function (hook_name) {
-        _.forEach(hooks[hook_name], function (hook) {
-          res.push("<dt>" + hook.hook_name + "</dt><dd>" + hook.hook_fn_name + " from " + hook.part.full_name + "</dd>");
+      pluginsmod.formatHooks = function (cb, hook_set_name) {
+      pluginsmod.extractHooks(pluginsmod.parts, hook_set_name || "hooks", function (err, hooks) {
+        var res = [];
+        _.chain(hooks).keys().forEach(function (hook_name) {
+          _.forEach(hooks[hook_name], function (hook) {
+            res.push("<dt>" + hook.hook_name + "</dt><dd>" + hook.hook_fn_name + " from " + hook.part.full_name + "</dd>");
+          });
         });
+        cb(null, "<dl>" + res.join("\n") + "</dl>");
       });
-      return "<dl>" + res.join("\n") + "</dl>";
     };
 
-    pluginsmod.loadFn = function (path, hookName) {
+    pluginsmod.loadFn = function (path, hookName, cb) {
       var functionName
         , parts = path.split(":");
 
@@ -53,24 +54,23 @@
         path = parts[0];
         functionName = parts[1];
       }
-
-      var fn = require(path);
       functionName = functionName ? functionName : hookName;  
 
-      _.each(functionName.split("."), function (name) {
-        fn = fn[name];
+      require([path], function (fn) {
+        // FIXME: Handle errors here
+        _.each(functionName.split("."), function (name) {
+          fn = fn[name];
+        });
+        cb(null, fn);
       });
-      return fn;
     };
 
-    pluginsmod.extractHooks = function (parts, hook_set_name) {
-      var hooks = {};
+    pluginsmod.extractHooks = function (parts, hook_set_name, cb) {
+      var hooks = [];
       _.each(parts,function (part) {
         _.chain(part[hook_set_name] || {})
         .keys()
         .each(function (hook_name) {
-          if (hooks[hook_name] === undefined) hooks[hook_name] = [];
-
           var hook_fn_name = part[hook_set_name][hook_name];
 
           /* On the server side, you can't just
@@ -78,23 +78,45 @@
            * a dependency of another plugin! Bah, pesky little details of
            * npm... */
           if (!pluginsmod.isClient) {
-            hook_fn_name = path.normalize(path.join(path.dirname(pluginsmod.plugins[part.plugin].package.path), hook_fn_name));
+            hook_fn_name = path.normalize(
+              path.relative(
+                path.resolve("."),
+                path.join(path.dirname(pluginsmod.plugins[part.plugin].package.path),
+                  hook_fn_name)
+              )
+            );
           }
-
-          try {
-            var hook_fn = pluginsmod.loadFn(hook_fn_name, hook_name);
-            if (!hook_fn) {
-              throw "Not a function";
-            }
-          } catch (exc) {
-            console.error("Failed to load '" + hook_fn_name + "' for '" + part.full_name + "/" + hook_set_name + "/" + hook_name + "': " + exc.toString())
-          }
-          if (hook_fn) {
-            hooks[hook_name].push({"hook_name": hook_name, "hook_fn": hook_fn, "hook_fn_name": hook_fn_name, "part": part});
-          }
+          hooks.push({"hook_name": hook_name, "hook_fn_name": hook_fn_name, "part": part});
         });
       });
-      return hooks;
+
+      async.parallel(
+        hooks.map(function (hook) {
+          return function(cb) {
+            pluginsmod.loadFn(hook.hook_fn_name, hook.hook_name, function (err, hook_fn) {
+              if (err) {
+                console.error("Failed to load '" + hook.hook_fn_name + "' for '" + hook.part.full_name + "/" + hook_set_name + "/" + hook.hook_name + "': " + err.toString());
+                hook = undefined;
+              } else {
+                hook.hook_fn = hook_fn;
+              }
+              cb(null, hook);
+            });
+          }
+        }),
+        function (err, hooks) {
+          // Filter out undefined ones, that is, ones that failed to
+          // load, and make a mapping of hook_name -> list of hook
+          // registrations
+          var hookmap = {};
+          _.each(hooks, function (hook) {
+            if (!hook) return;
+            if (hookmap[hook.hook_name] === undefined) hookmap[hook.hook_name] = [];
+            hookmap[hook.hook_name].push(hook);
+          });          
+          cb(err, hookmap);
+        }
+      );
     };
 
 
@@ -108,9 +130,11 @@
         jQuery.getJSON(pluginsmod.baseURL + 'pluginfw/plugin-definitions.json', function(data) {
           pluginsmod.plugins = data.plugins;
           pluginsmod.parts = data.parts;
-          pluginsmod.hooks = pluginsmod.extractHooks(pluginsmod.parts, "client_hooks");
-          pluginsmod.loaded = true;
-          callback();
+          pluginsmod.extractHooks(pluginsmod.parts, "client_hooks", function (err, hooks) {
+            pluginsmod.hooks = hooks;
+            pluginsmod.loaded = true;
+            callback();
+          });
          }).error(function(xhr, s, err){
            console.error("Failed to load plugin-definitions: " + err);
            callback();
@@ -154,9 +178,11 @@
               if (err) cb(err);
               pluginsmod.plugins = plugins;
               pluginsmod.parts = pluginsmod.sortParts(parts);
-                pluginsmod.hooks = pluginsmod.extractHooks(pluginsmod.parts, "hooks");
-              pluginsmod.loaded = true;
-              pluginsmod.callInit(cb);
+              pluginsmod.extractHooks(pluginsmod.parts, "hooks", function (err, hooks) {
+                pluginsmod.hooks = hooks;
+                pluginsmod.loaded = true;
+                pluginsmod.callInit(cb);
+              });
             }
           );
         });
@@ -170,7 +196,7 @@
           var packages = {};
           function flatten(deps) {
             _.chain(deps).keys().each(function (name) {
-              if (name.indexOf(pluginsmod.prefix) === 0) {
+              if (name.indexOf(pluginsmod.prefix) === 0 || name.indexOf(pluginsmod.prefix_hidden) === 0) {
                 packages[name] = _.clone(deps[name]);
                 // Delete anything that creates loops so that the plugin
                 // list can be sent as JSON to the web client
@@ -249,12 +275,12 @@
   };
 
   if (isClient) {
-    define(["./underscore", "./jquery"], function (_, jQuery) { return  makeMod(_, jQuery); });
+    define(["./underscore", "./async", "./jquery"], function (_, async, jQuery) { return  makeMod(_, async, jQuery); });
   } else {
     define(
-      ["npm/lib/npm.js", "eh_plugin/read-installed.js", "npm/lib/utils/relativize.js", "npm/lib/utils/read-json.js", "path", "./async", "fs", "./tsort", "util", "./underscore"],
-      function (npm, readInstalled, relativize, readJson, path, async, fs, tsort, util, _) {
-        return makeMod(_, undefined, npm, readInstalled, relativize, readJson, path, async, fs, tsort, util);
+        ["./underscore", "./async", "npm/lib/npm.js", "eh_plugin/read-installed.js", "npm/lib/utils/relativize.js", "npm/lib/utils/read-json.js", "path", "fs", "./tsort", "util"],
+      function (_, async, npm, readInstalled, relativize, readJson, path, fs, tsort, util) {
+        return makeMod(_, async, undefined, npm, readInstalled, relativize, readJson, path, fs, tsort, util);
       }
     );
   }

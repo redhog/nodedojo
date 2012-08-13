@@ -4,3 +4,4 @@ dirty.db
 *.patch
 npm-debug.log
 *.DS_Store
+.ep_initialized
