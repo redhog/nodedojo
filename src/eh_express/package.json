@@ -1,0 +1,22 @@
+{
+  "name"           : "eh_express",
+  "description"    : "ExpressJS eh_plugin wrapper",
+  "homepage"       : "https://github.com/redhog/eh_express",
+  "keywords"       : ["plugin", "express"],
+  "author"         : "RedHog (Egil Moeller) <redhog@redhog.org>",
+  "contributors"   : [ { "name": "Egil Moeller" } ],
+  "dependencies"   : {
+                      "express"             : "2.5.8",
+                      "connect"             : "1.8.7",
+                      "log4js"              : "0.4.1",
+                      "socket.io"           : "0.9.6"
+                     },
+  "bin":             { },
+  "devDependencies": {
+                      "jshint"  : "*"
+                     },
+  "engines"        : { "node" : ">=0.6.0",
+                       "npm"  : ">=1.0"
+                     }, 
+  "version"        : "1.0.0"
+}
