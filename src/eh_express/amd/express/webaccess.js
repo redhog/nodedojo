@@ -1,4 +1,4 @@
-define(["express", "log4js", "eh_plugin/static/amd/hooks"], function (express, log4js, hooks) {
+define(["express", "log4js", "eh_plugin/static/amd/hooks", "eh_plugin/static/amd/plugins"], function (express, log4js, hooks, plugins) {
   var webaccessmod = {};
 
   webaccessmod.randomString = function (len) {
@@ -26,6 +26,7 @@ define(["express", "log4js", "eh_plugin/static/amd/hooks"], function (express, l
 
     var authorize = function (cb) {
       // Do not require auth for static paths...this could be a bit brittle
+      if (req.path == '/') return cb(true);
       if (req.path.match(/^\/static/)) return cb(true);
       if (req.session && req.session.user && req.session.user.is_admin) return cb(true);
       hooks.aCallFirst("authorize", {req: req, res:res, next:next, resource: req.path}, hookResultMangle(cb));
