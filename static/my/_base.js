@@ -5,7 +5,15 @@ require(["path", "jsdom", "resolve", "node-proxy"], function (path, jsdom, resol
       context.npmamd = true;
       context.config.map = Proxy.create({get:function (proxy, parentModuleName) {
         return Proxy.create({get:function (proxy, moduleName) {
+          /* Rules for what we return:
+
+             Paths starting with ./, ../, or / will be treated as AMD modules
+             Paths ending with .js  will be treated as AMD modules
+             Paths on the form foo/bar/fie will be treated as node modules
+           */
+
           var res;
+          var msg = "";
           try {
             res = resolve.sync(
               moduleName,
@@ -15,15 +23,23 @@ require(["path", "jsdom", "resolve", "node-proxy"], function (path, jsdom, resol
                 extensions : [ '.js' ],
               }
             );
-            res = res.match(/\.\/(.*)\.[^.]*/)[1];
+            if (res.indexOf("/") == 0) {
+              res = path.relative(process.cwd(), res)
+            }
+            var noext = res.match(/\.\/(.*)\.[^.]*/);
+            if (noext) {
+              res = noext[1];
+            }
             if (res.indexOf('/amd/') == -1 && res.indexOf('node_modules') == 0) {
+              msg = "removed node_modules";
               res = res.match(/node_modules\/(.*)/)[1];
             }
           } catch (e) {
+            msg = e;
             res = moduleName;
           }
 
-          // console.log( ["Y", parentModuleName, moduleName, res]);
+//          console.log("require(" + parentModuleName + " -> " + moduleName + ") => " + res + " (" + msg + ")");
 
           return res;
         }});
