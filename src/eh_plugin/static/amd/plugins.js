@@ -1,7 +1,7 @@
 (function () {
   var isClient = typeof global != "object";
 
-  var makeMod = function (_, async, jQuery, npm, readInstalled, relativize, readJson, path, fs, tsort, util) {
+  var makeMod = function (localRequire, _, async, jQuery, npm, readInstalled, relativize, readJson, path, fs, tsort, util) {
     var pluginsmod = {};
 
     pluginsmod.isClient = isClient;
@@ -143,25 +143,26 @@
     } else {
 
       pluginsmod.callInit = function (cb) {
-        var hooks = require("./hooks");
-        async.map(
-          Object.keys(pluginsmod.plugins),
-          function (plugin_name, cb) {
-            var plugin = pluginsmod.plugins[plugin_name];
-            fs.stat(path.normalize(path.join(plugin.package.path, ".ep_initialized")), function (err, stats) {
-              if (err) {
-                async.waterfall([
-                  function (cb) { fs.writeFile(path.normalize(path.join(plugin.package.path, ".ep_initialized")), 'done', cb); },
-                  function (cb) { hooks.aCallAll("init_" + plugin_name, {}, cb); },
-                  cb,
-                ]);
-              } else {
-                cb();
-              }
-            });
-          },
-          function () { cb(); }
-        );
+        localRequire(["./hooks"], function (hooks) {
+          async.map(
+            Object.keys(pluginsmod.plugins),
+            function (plugin_name, cb) {
+              var plugin = pluginsmod.plugins[plugin_name];
+              fs.stat(path.normalize(path.join(plugin.package.path, ".ep_initialized")), function (err, stats) {
+                if (err) {
+                  async.waterfall([
+                    function (cb) { fs.writeFile(path.normalize(path.join(plugin.package.path, ".ep_initialized")), 'done', cb); },
+                    function (cb) { hooks.aCallAll("init_" + plugin_name, {}, cb); },
+                    cb,
+                  ]);
+                } else {
+                  cb();
+                }
+              });
+            },
+            function () { cb(); }
+          );
+        });
       }
 
       pluginsmod.update = function (cb) {
@@ -275,12 +276,12 @@
   };
 
   if (isClient) {
-    define(["eh_underscore/static/amd/underscore", "eh_async/static/amd/async", "./jquery"], function (_, async, jQuery) { return  makeMod(_, async, jQuery); });
+    define(["require", "eh_underscore/static/amd/underscore", "eh_async/static/amd/async", "./jquery"], function (require, _, async, jQuery) { return  makeMod(require, _, async, jQuery); });
   } else {
     define(
-        ["eh_underscore/static/amd/underscore", "eh_async/static/amd/async", "npm/lib/npm.js", "eh_plugin/read-installed.js", "npm/lib/utils/relativize.js", "npm/lib/utils/read-json.js", "path", "fs", "eh_tsort/static/amd/tsort", "util"],
-      function (_, async, npm, readInstalled, relativize, readJson, path, fs, tsort, util) {
-        return makeMod(_, async, undefined, npm, readInstalled, relativize, readJson, path, fs, tsort, util);
+      ["require", "eh_underscore/static/amd/underscore", "eh_async/static/amd/async", "npm/lib/npm.js", "eh_plugin/read-installed.js", "npm/lib/utils/relativize.js", "npm/lib/utils/read-json.js", "path", "fs", "eh_tsort/static/amd/tsort", "util"],
+        function (require, _, async, npm, readInstalled, relativize, readJson, path, fs, tsort, util) {
+          return makeMod(require, _, async, undefined, npm, readInstalled, relativize, readJson, path, fs, tsort, util);
       }
     );
   }
