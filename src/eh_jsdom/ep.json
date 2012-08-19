@@ -1,0 +1,7 @@
+{
+  "parts": [
+    { "name": "jsdom", "hooks": {
+      "createServer": "eh_jsdom/amd/jsdom:createServer"
+      } }
+  ]
+}
