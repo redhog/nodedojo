@@ -38,8 +38,7 @@ define(["path", "fs", "eh_plugin/static/amd/plugins", "eh_plugin/static/amd/hook
         res.sendfile(
           path.normalize(
             path.join(
-              path.dirname(
-                plugins.plugins[req.params.pluginname].package.path),
+              plugins.plugins[req.params.pluginname].package.path,
               'static',
               req.params.filename)));
       });
