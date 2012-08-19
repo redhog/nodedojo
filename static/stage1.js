@@ -39,7 +39,7 @@ require(["path", "jsdom", "resolve", "node-proxy"], function (path, jsdom, resol
             res = moduleName;
           }
 
-//          console.log("require(" + parentModuleName + " -> " + moduleName + ") => " + res + " (" + msg + ")");
+          console.log("require(" + parentModuleName + " -> " + moduleName + ") => " + res + " (" + msg + ")");
 
           return res;
         }});
@@ -50,62 +50,9 @@ require(["path", "jsdom", "resolve", "node-proxy"], function (path, jsdom, resol
 
   require({
     baseUrl: './',
-    // set the paths to our library packages
-    packages: [
-      {
-        name: 'dojo',
-        location: 'static/lib/dojo',
-        // these are loaded from js/lib/dojo/lib.
-        // lib/main-commonjs is the alternative package
-        // main module from ticket #12357;
-        // you must place it there yourself (it does not
-        // come with dojo yet)
-        main: typeof window !== "undefined" ?
-          'main' :
-          '../main-commonjs',
-        lib: '.'
-      },
-      {
-        name: 'dijit',
-        location: 'lib/dijit',
-        main: 'static/lib/main',
-        lib: '.'
-      }
-    ],
     // set the path for the require plugins—text, i18n, etc.
     paths: { require: 'node_modules/requirejs/require'},
   });
 
-  jsdom = jsdom.jsdom;
-  document = jsdom("<html><head></head><body>hello world</body></html>"),
-  window   = document.createWindow();
-  navigator = {
-      appCodeName: "NodeJS",
-      appName: "NodeJS",
-      appVersion: process.versions.node,
-      cookieEnabled: true,
-      geolocation: {},
-      language: "en-US",
-      mimeTypes: [],
-      onLine: true,
-      platform: "Linux i686",
-      plugins: [],
-      product: "NodeJS",
-      productSub: "20030107",
-      userAgent: process.versions.node,
-      vendor: "Google Inc.",
-      vendorSub: ""};
-  screen = {};
-  innerWidth = window.innerWidth;
-
-  dojoConfig = {
-    isDebug: true
-  };
-
-  require(["dojo"], function (dojo) {
-    dojo.isBrowser = false;
-    dojo.locale = navigator.language;
-
-    require(['static/my/app']);
-  });
+  require(['./static/stage2.js'], function (stage2) {});
 });

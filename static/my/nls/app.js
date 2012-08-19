@@ -1,3 +1,0 @@
-define({
-  helloWorld: "Hello World!"
-});
