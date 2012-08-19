@@ -5,14 +5,15 @@ define(["eh_plugin/static/amd/hooks", "eh_underscore/static/amd/underscore", "fs
 
   var settings = {ip: "127.0.0.1", port: 4711};
 
-  expressmod.createServer = function () {
+  expressmod.createServer = function (hook_name, args, cb) {
     serverName = "Node " + process.versions.node;
-    expressmod.restartServer(function () {
+    expressmod.restartServer("restartServer", {}, function () {
       console.log("You can access your node instance at http://" + settings.ip + ":" + settings.port + "/");
+      cb();
     });
   }
 
-  expressmod.restartServer = function (cb) {
+  expressmod.restartServer = function (hook_name, args, cb) {
     if (server) {
       console.log("Restarting express server");
       server.close();
