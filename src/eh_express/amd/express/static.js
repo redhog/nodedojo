@@ -12,6 +12,9 @@ define(["path", "fs", "eh_plugin/static/amd/plugins", "eh_plugin/static/amd/hook
         res.sendfile('static/index.html');
       });
 
+      args.app.all('/static/require.js', function (req, res, next) {
+        res.sendfile('node_modules/requirejs/require.js');
+      });
 
       // serve plugin definitions
       // not very static, but served here so that client can do require("eh_plugins/static/plugin-definitions.json");
@@ -39,6 +42,15 @@ define(["path", "fs", "eh_plugin/static/amd/plugins", "eh_plugin/static/amd/hook
           path.normalize(
             path.join(
               plugins.plugins[req.params.pluginname].package.path,
+              'static',
+              req.params.filename)));
+      });
+
+
+      args.app.all('/static/:filename(*)', function (req, res, next) {
+        res.sendfile(
+          path.normalize(
+            path.join(
               'static',
               req.params.filename)));
       });

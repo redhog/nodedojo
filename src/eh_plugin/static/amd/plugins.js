@@ -127,7 +127,7 @@
         // which appears to fix the issue.
         var callback = function () {setTimeout(cb, 0);};
 
-        jQuery.getJSON(pluginsmod.baseURL + 'pluginfw/plugin-definitions.json', function(data) {
+        jQuery.getJSON(pluginsmod.baseURL + 'static/eh_plugins/static/plugin-definitions.json', function(data) {
           pluginsmod.plugins = data.plugins;
           pluginsmod.parts = data.parts;
           pluginsmod.extractHooks(pluginsmod.parts, "client_hooks", function (err, hooks) {
@@ -276,7 +276,7 @@
   };
 
   if (isClient) {
-    define(["require", "eh_underscore/static/amd/underscore", "eh_async/static/amd/async", "./jquery"], function (require, _, async, jQuery) { return  makeMod(require, _, async, jQuery); });
+      define(["require", "eh_underscore/static/amd/underscore", "eh_async/static/amd/async", "eh_jquery/static/amd/jquery"], function (require, _, async, jQuery) { return  makeMod(require, _, async, jQuery); });
   } else {
     define(
       ["require", "eh_underscore/static/amd/underscore", "eh_async/static/amd/async", "npm/lib/npm.js", "eh_plugin/read-installed.js", "npm/lib/utils/relativize.js", "npm/lib/utils/read-json.js", "path", "fs", "eh_tsort/static/amd/tsort", "util"],

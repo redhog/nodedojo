@@ -1,4 +1,14 @@
 <html>
+  <head>
+    <script src="/static/require.js"></script>
+    <script>
+      require.config({
+        baseUrl: "/static",
+        waitSeconds: 15
+      });
+      require(["stage2"], function() {});
+    </script>
+  </head>
   <body>
     Hej!
   </body>

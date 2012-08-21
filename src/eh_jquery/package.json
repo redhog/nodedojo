@@ -1,0 +1,17 @@
+{
+  "name"           : "eh_jquery",
+  "description"    : "Jquery server side AMD wrapper",
+  "homepage"       : "https://github.com/redhog/eh_jquery",
+  "keywords"       : ["jquery"],
+  "author"         : "RedHog (Egil Moeller) <redhog@redhog.org>",
+  "contributors"   : [ { "name": "Egil Moeller" } ],
+  "dependencies"   : { },
+  "bin":             { },
+  "devDependencies": {
+                      "jshint"  : "*"
+                     },
+  "engines"        : { "node" : ">=0.6.0",
+                       "npm"  : ">=1.0"
+                     }, 
+  "version"        : "1.0.0"
+}

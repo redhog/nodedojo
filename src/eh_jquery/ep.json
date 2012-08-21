@@ -1,0 +1,9 @@
+{
+  "parts": [
+    { "name": "jquery",
+      "hooks": {
+        "init_eh_jquery": "eh_jquery/amd/jquery:init"
+      }
+    }
+  ]
+}
