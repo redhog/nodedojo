@@ -1,5 +1,5 @@
 // requires dojo and our i18n dictionary
-define(['eh_plugin/static/amd/plugins', 'eh_plugin/static/amd/hooks', "eh_async/static/amd/async"], function (plugins, hooks, async) {
+define(["require", 'eh_plugin/static/amd/plugins', 'eh_plugin/static/amd/hooks', "eh_async/static/amd/async"], function (r, plugins, hooks, async) {
   async.series(
     [
       plugins.update,

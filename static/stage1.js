@@ -39,7 +39,7 @@ require(["path", "jsdom", "resolve", "node-proxy"], function (path, jsdom, resol
             res = moduleName;
           }
 
-          console.log("require(" + parentModuleName + " -> " + moduleName + ") => " + res + " (" + msg + ")");
+//          console.log("require(" + parentModuleName + " -> " + moduleName + ") => " + res + " (" + msg + ")");
 
           return res;
         }});

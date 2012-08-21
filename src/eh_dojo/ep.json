@@ -1,0 +1,12 @@
+{
+  "parts": [
+    { "name": "dojo",
+      "hooks": {
+        "init_eh_dojo": "eh_dojo/amd/dojo:init",
+        "createServer": "eh_dojo/amd/dojo:createServer"
+      },
+      "pre": ["eh_jsdom/jsdom"],
+      "post": ["eh_express/express"]
+    }
+  ]
+}
