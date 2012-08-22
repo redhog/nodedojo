@@ -3,7 +3,7 @@
     { "name": "dojo",
       "hooks": {
         "init_eh_dojo": "eh_dojo/amd/dojo:init",
-        "createServer": "eh_dojo/amd/dojo:createServer"
+        "create": "eh_dojo/amd/dojo:create"
       },
       "pre": ["eh_jsdom/jsdom"],
       "post": ["eh_express/express"]

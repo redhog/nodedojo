@@ -8,7 +8,7 @@ define(["require", "child_process", "path", "find!."], function (require, child_
         cb();
       });
     },
-    createServer: function (hook_name, args, cb) {
+    create: function (hook_name, args, cb) {
        dojoConfig = {
          isDebug: true
        };
