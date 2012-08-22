@@ -38,6 +38,11 @@ define(["path", "fs", "eh_plugin/static/amd/plugins", "eh_plugin/static/amd/hook
       });
 
       args.app.all('/static/:pluginname/static/:filename(*)', function (req, res, next) {
+        if (!plugins.plugins[req.params.pluginname]) {
+          console.error("Unable to find " + req.params.pluginname + " in (" + _.keys(plugins.plugins).join(", "))
+          return;
+        }
+
         res.sendfile(
           path.normalize(
             path.join(

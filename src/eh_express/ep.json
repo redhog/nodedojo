@@ -1,8 +1,8 @@
 {
   "parts": [
     { "name": "express", "hooks": {
-      "createServer": "eh_express/amd/express:createServer",
-      "restartServer": "eh_express/amd/express:restartServer"
+      "create": "eh_express/amd/express:create",
+      "restart": "eh_express/amd/express:restart"
       } },
     { "name": "static", "hooks": { "expressCreateServer": "eh_express/amd/express/static:expressCreateServer" } },
     { "name": "webaccess", "hooks": { "expressConfigure": "eh_express/amd/express/webaccess:expressConfigure" } },

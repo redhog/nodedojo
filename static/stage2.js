@@ -11,7 +11,7 @@ define(["require", 'eh_plugin/static/amd/plugins', 'eh_plugin/static/amd/hooks',
       console.log("Plugins:\n" + results[1]);
       console.log("\n\nParts:\n" + results[2]);
       console.log("\n\nHooks:\n" + results[3]);
-      hooks.callAll("createServer", {});
+      hooks.callAll("create", {});
     }
   );
   return;

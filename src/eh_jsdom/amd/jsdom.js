@@ -1,6 +1,6 @@
 define(["jsdom"], function (jsdom) {
   return {
-    createServer: function (hook_name, args, cb) {
+    create: function (hook_name, args, cb) {
       document = jsdom.jsdom("<html><head></head><body>hello world</body></html>"),
       window   = document.createWindow();
       navigator = {
