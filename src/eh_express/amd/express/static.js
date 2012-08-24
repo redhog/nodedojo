@@ -9,7 +9,11 @@ define(["path", "fs", "eh_plugin/static/amd/plugins", "eh_plugin/static/amd/hook
       */
 
       args.app.all('/', function (req, res, next) {
-        res.sendfile('static/index.html');
+        res.sendfile(
+          path.normalize(
+            path.join(
+              plugins.plugins.eh_express.package.path,
+              'static/index.html')));
       });
 
       args.app.all('/static/require.js', function (req, res, next) {
