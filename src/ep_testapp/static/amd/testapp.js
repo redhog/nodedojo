@@ -1,18 +1,6 @@
 define(["eh_plugin/static/amd/hooks", "eh_jquery/static/amd/jquery", "eh_underscore/static/amd/underscore"], function (hooks, $, _) {
   testapp = {
     create: function (hook_name, args, cb) {
-
-      dojoConfig = {
-        isDebug: true
-      };
-
-      require.config({
-        packages: [
-          {name: "dojo", location: 'eh_dojo/static/amd/dojo', main:'main'},
-          {name: "dijit", location: 'eh_dojo/static/amd/dijit', main:'main'},
-          {name: "dojox", location: 'eh_dojo/static/amd/dojox', main:'main'}
-        ]
-      });
       require(["dojo",
                "dijit/layout/BorderContainer",
                "dijit/layout/ContentPane",
@@ -26,9 +14,6 @@ define(["eh_plugin/static/amd/hooks", "eh_jquery/static/amd/jquery", "eh_undersc
                "dijit/_base/popup",
                "dojo/html",
               ], function (dojo) {
-        dojo.isBrowser = true;
-        dojo.locale = navigator.language;
-
         console.log("Testapp loaded");
 
         testapp.Ui = dojo.declare([dijit.layout.BorderContainer], {
@@ -77,10 +62,6 @@ define(["eh_plugin/static/amd/hooks", "eh_jquery/static/amd/jquery", "eh_undersc
             return this.inherited(arguments);
           }
         });
-
-        $("body").addClass("claro");
-        $("<div id='ui'></div>").appendTo("body");
-        $("<link rel='stylesheet' href='/static/eh_dojo/static/amd/dijit/themes/claro/claro.css' type='text/css' />").appendTo("head");
 
         dojo.addOnLoad(function() {
           ui = testapp.Ui({}, "ui");

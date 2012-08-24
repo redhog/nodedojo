@@ -29,8 +29,8 @@
       cb(null, _.map(pluginsmod.parts, function (part) { return part.full_name; }).join("\n"));
     };
 
-      pluginsmod.formatHooks = function (cb, hook_set_name) {
-      pluginsmod.extractHooks(pluginsmod.parts, hook_set_name || "hooks", function (err, hooks) {
+    pluginsmod.formatHooks = function (cb, hook_set_name) {
+      pluginsmod.extractHooks(pluginsmod.parts, hook_set_name || (pluginsmod.isClient ? "client_hooks" : "hooks"), false, function (err, hooks) {
         var res = [];
         _.chain(hooks).keys().forEach(function (hook_name) {
           _.forEach(hooks[hook_name], function (hook) {
@@ -65,7 +65,7 @@
       });
     };
 
-    pluginsmod.extractHooks = function (parts, hook_set_name, cb) {
+    pluginsmod.extractHooks = function (parts, hook_set_name, do_load, cb) {
       var hooks = [];
       _.each(parts,function (part) {
         _.chain(part[hook_set_name] || {})
@@ -90,6 +90,21 @@
         });
       });
 
+      var makeMap = function (hooks) {
+        // Filter out undefined ones, that is, ones that failed to
+        // load, and make a mapping of hook_name -> list of hook
+        // registrations
+        var hookmap = {};
+        _.each(hooks, function (hook) {
+          if (!hook) return;
+          if (hookmap[hook.hook_name] === undefined) hookmap[hook.hook_name] = [];
+          hookmap[hook.hook_name].push(hook);
+        });
+        return hookmap;
+      };
+
+      if (!do_load) return cb(null, makeMap(hooks));
+
       async.parallel(
         hooks.map(function (hook) {
           return function(cb) {
@@ -105,16 +120,7 @@
           }
         }),
         function (err, hooks) {
-          // Filter out undefined ones, that is, ones that failed to
-          // load, and make a mapping of hook_name -> list of hook
-          // registrations
-          var hookmap = {};
-          _.each(hooks, function (hook) {
-            if (!hook) return;
-            if (hookmap[hook.hook_name] === undefined) hookmap[hook.hook_name] = [];
-            hookmap[hook.hook_name].push(hook);
-          });          
-          cb(err, hookmap);
+          cb(err, makeMap(hooks));
         }
       );
     };
@@ -130,7 +136,7 @@
         jQuery.getJSON(pluginsmod.baseURL + 'static/eh_plugins/static/plugin-definitions.json', function(data) {
           pluginsmod.plugins = data.plugins;
           pluginsmod.parts = data.parts;
-          pluginsmod.extractHooks(pluginsmod.parts, "client_hooks", function (err, hooks) {
+          pluginsmod.extractHooks(pluginsmod.parts, "client_hooks", true, function (err, hooks) {
             pluginsmod.hooks = hooks;
             pluginsmod.loaded = true;
             callback();
@@ -179,7 +185,7 @@
               if (err) cb(err);
               pluginsmod.plugins = plugins;
               pluginsmod.parts = pluginsmod.sortParts(parts);
-              pluginsmod.extractHooks(pluginsmod.parts, "hooks", function (err, hooks) {
+              pluginsmod.extractHooks(pluginsmod.parts, "hooks", true, function (err, hooks) {
                 pluginsmod.hooks = hooks;
                 pluginsmod.loaded = true;
                 pluginsmod.callInit(cb);

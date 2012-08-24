@@ -2,8 +2,11 @@
   "parts": [
     { "name": "dojo",
       "hooks": {
-        "init_eh_dojo": "eh_dojo/amd/dojo:init",
-        "create": "eh_dojo/amd/dojo:create"
+        "init_eh_dojo": "eh_dojo/amd/eh_dojo:init",
+        "create": "eh_dojo/amd/eh_dojo:create"
+      },
+      "client_hooks": {
+        "create": "eh_dojo/static/amd/eh_dojo:create"
       },
       "pre": ["eh_jsdom/jsdom"],
       "post": ["eh_express/express"]
