@@ -1,0 +1,17 @@
+{
+  "name"           : "eh_replserver",
+  "description"    : "Replserver provides a javascript interactive prompt over TCP",
+  "homepage"       : "https://github.com/redhog/eh_replserver",
+  "keywords"       : ["plugin", "replserver"],
+  "author"         : "RedHog (Egil Moeller) <redhog@redhog.org>",
+  "contributors"   : [ { "name": "Egil Moeller" } ],
+  "dependencies"   : { },
+  "bin":             { },
+  "devDependencies": {
+                      "jshint"  : "*"
+                     },
+  "engines"        : { "node" : ">=0.6.0",
+                       "npm"  : ">=1.0"
+                     }, 
+  "version"        : "1.0.0"
+}
