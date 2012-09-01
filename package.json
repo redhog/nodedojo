@@ -11,7 +11,9 @@
                       "jsdom"               : "0.2.15",
                       "requirejs"           : "2.0.4",
                       "node-proxy"          : "0.5.2",
-                      "resolve"             : "0.2.1"
+                      "resolve"             : "0.2.1",
+                      "commander"           : "1.0.3",
+                      "eh_plugin"           : "1.0.0"
                      },
   "bin":             { },
   "devDependencies": {
