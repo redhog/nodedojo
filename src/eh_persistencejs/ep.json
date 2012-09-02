@@ -1,0 +1,12 @@
+{
+  "parts": [
+    { "name": "persistencejs",
+      "hooks": {
+        "init_eh_persistencejs": "eh_persistencejs/amd/persistencejs:init",
+        "create": "eh_persistencejs/amd/persistencejs:create",
+        "commands": "eh_persistencejs/amd/persistencejs:commands",
+        "commands_syncdb": "eh_persistencejs/amd/persistencejs:commands_syncdb"
+      }
+    }
+  ]
+}
