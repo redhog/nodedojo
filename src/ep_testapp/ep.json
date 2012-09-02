@@ -2,9 +2,9 @@
   "parts": [
     { "name": "testapp",
       "client_hooks": {
-        "commands_server": "ep_testapp/static/amd/testapp:create"
+        "create": "ep_testapp/static/amd/testapp:create"
       },
-      "pre": ["eh_dojo/dojo"]
+      "pre": ["eh_dojo/dojo", "eh_persistencejs/persistencejs"]
     }
   ]
 }
