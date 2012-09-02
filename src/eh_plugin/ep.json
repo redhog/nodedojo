@@ -1,9 +1,10 @@
 {
   "parts": [
     {
-      "name": "foo",
+      "name": "commands",
       "hooks": {
-        "foo": "eh_plugin/static/amd/foo:bar"
+        "commands": "eh_plugin/amd/commands:commands",
+        "commands_plugins": "eh_plugin/amd/commands:commands_plugins"
       }
     }
   ]

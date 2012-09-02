@@ -1,7 +1,7 @@
 {
   "parts": [
     { "name": "express", "hooks": {
-      "create": "eh_express/amd/express:create",
+      "commands_server": "eh_express/amd/express:create",
       "restart": "eh_express/amd/express:restart"
       } },
     { "name": "static", "hooks": { "expressCreateServer": "eh_express/amd/express/static:expressCreateServer" } },

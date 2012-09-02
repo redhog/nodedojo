@@ -1,7 +1,7 @@
 {
   "parts": [
     { "name": "replserver", "hooks": {
-      "create": "eh_replserver/amd/replserver:create",
+      "commands_server": "eh_replserver/amd/replserver:create",
       "restart": "eh_replserver/amd/replserver:restart"
       } }
   ]
