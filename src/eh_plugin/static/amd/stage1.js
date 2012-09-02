@@ -54,5 +54,5 @@ require(["path", "jsdom", "resolve", "node-proxy"], function (path, jsdom, resol
     paths: { require: 'node_modules/requirejs/require'},
   });
 
-  require(['./static/stage2.js'], function (stage2) {});
+  require(['./node_modules/eh_plugin/static/amd/stage2.js'], function (stage2) {});
 });

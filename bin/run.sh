@@ -10,4 +10,4 @@ fi
 
 #Move to the node folder and start
 echo "start..."
-node node_modules/requirejs/bin/r.js static/stage1.js $*
+node node_modules/requirejs/bin/r.js ./node_modules/eh_plugin/static/amd/stage1.js $*

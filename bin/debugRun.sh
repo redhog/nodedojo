@@ -19,7 +19,7 @@ node-inspector &
 
 echo "If you are new to node-inspector, take a look at this video: http://youtu.be/AOnK3NVnxL8"
 
-node --debug node_modules/requirejs/bin/r.js static/stage1.js $*
+node --debug node_modules/requirejs/bin/r.js ./node_modules/eh_plugin/static/amd/stage1.js $*
 
 #kill node-inspector before ending 
 kill $!
